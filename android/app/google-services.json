@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "984655009712",
+    "firebase_url": "https://bsru-train.firebaseio.com",
+    "project_id": "bsru-train",
+    "storage_bucket": "bsru-train.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984655009712:android:5717c501ce7e7440aaa875",
+        "android_client_info": {
+          "package_name": "com.example.test_myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984655009712-cct63pui7m3icqun20p4d4afo15f7gp9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKTaM5dE9ipeGPmdbrqJIoaZqJXIs2JKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984655009712-cct63pui7m3icqun20p4d4afo15f7gp9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
