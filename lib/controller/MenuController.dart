@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 class MenuController {
   
   final _menustore = FirebaseFirestore.instance.collection('menu');
-  firebase_storage.Reference refProfile = firebase_storage.FirebaseStorage.instance.ref('menu');
+  firebase_storage.Reference refMenu = firebase_storage.FirebaseStorage.instance.ref('menu');
   
   Future<bool> addNewMenu(MenuItemModel menuItem, List<XFile> fileItem) async {
     try {
@@ -20,12 +21,12 @@ class MenuController {
 
       // # upload image
       var queue = <Future<TaskSnapshot>>[];
-      var pathDownload = [];
+      var pathDownload = <String>[];
       for (final file in fileItem) {
-        final path = '${user.uid}/${file.name}-${DateTime.now().millisecondsSinceEpoch}';
+        final path = '${user.uid}/${file.name}-${DateTime.now().millisecondsSinceEpoch}.jpg';
         pathDownload.add(path);
         queue.add(
-          refProfile
+          refMenu
             .child(path)
             .putFile(File(file.path))
         );
@@ -38,10 +39,14 @@ class MenuController {
       }
 
       // # assing img path
-      final resultDownload = await Future.wait(pathDownload.map((path) => refProfile
-        .child(path)
-        .getDownloadURL()
-      ));
+      final resultDownload = await Future.wait(pathDownload.map((path) {
+        print(refMenu
+          .child(path).fullPath
+          );
+        return refMenu
+          .child(path)
+          .getDownloadURL();
+      }));
 
       menuItem.imgPath = resultDownload;
 

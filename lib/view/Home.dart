@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -72,24 +73,33 @@ class _HomePageState extends State<HomePage> {
                     staggeredTiles: data.map((_) => StaggeredTile.fit(1)).toList(),
                     children: data.map((doc) {
                       MenuItemModel menuItem = MenuItemModel.fromJson(jsonEncode(doc.data()));
-                      return Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(menuItem.imgPath.first),
-                              SizedBox(height: 10),
-                              Text(menuItem.name, style: TextStyle(
-                                fontSize: 16
-                              )),
-                              Text(menuItem.description, style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey
-                              ))
-                            ]
-                          )
-                        )
+                      return Material(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/update_menu_item', arguments: {
+                              "menuItem" : menuItem
+                            });
+                          },
+                          child: Card(
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.network(menuItem.imgPath.first),
+                                  SizedBox(height: 10),
+                                  Text(menuItem.name, style: TextStyle(
+                                    fontSize: 16
+                                  )),
+                                  Text(menuItem.description, style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey
+                                  ))
+                                ]
+                              )
+                            )
+                          ),
+                        ),
                       );
                     }).toList()
                   );
