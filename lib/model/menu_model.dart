@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 class MenuItemModel {
+  final String? id;
   List<String> imgPath;
   String name;
   String description;
   List<MenuItemModelDetail> item;
   
   MenuItemModel({
+    this.id,
     required this.imgPath,
     required this.name,
     required this.description,
@@ -17,12 +19,14 @@ class MenuItemModel {
   });
 
   MenuItemModel copyWith({
+    String? id,
     List<String>? imgPath,
     String? name,
     String? description,
     List<MenuItemModelDetail>? item,
   }) {
     return MenuItemModel(
+      id: id ?? this.id,
       imgPath: imgPath ?? this.imgPath,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -32,15 +36,17 @@ class MenuItemModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'imgPath': imgPath,
       'name': name,
       'description': description,
-      'item': item.map((x) => x.toMap()).toList()
+      'item': item.map((x) => x.toMap()).toList(),
     };
   }
 
   factory MenuItemModel.fromMap(Map<String, dynamic> map) {
     return MenuItemModel(
+      id: map['id'],
       imgPath: List<String>.from(map['imgPath']),
       name: map['name'],
       description: map['description'],
@@ -54,7 +60,7 @@ class MenuItemModel {
 
   @override
   String toString() {
-    return 'MenuItemModel(imgPath: $imgPath, name: $name, description: $description, item: $item)';
+    return 'MenuItemModel(id: $id, imgPath: $imgPath, name: $name, description: $description, item: $item)';
   }
 
   @override
@@ -62,6 +68,7 @@ class MenuItemModel {
     if (identical(this, other)) return true;
   
     return other is MenuItemModel &&
+      other.id == id &&
       listEquals(other.imgPath, imgPath) &&
       other.name == name &&
       other.description == description &&
@@ -70,7 +77,8 @@ class MenuItemModel {
 
   @override
   int get hashCode {
-    return imgPath.hashCode ^
+    return id.hashCode ^
+      imgPath.hashCode ^
       name.hashCode ^
       description.hashCode ^
       item.hashCode;

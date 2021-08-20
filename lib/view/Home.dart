@@ -72,11 +72,13 @@ class _HomePageState extends State<HomePage> {
                     crossAxisCount: 2,
                     staggeredTiles: data.map((_) => StaggeredTile.fit(1)).toList(),
                     children: data.map((doc) {
+                      
                       MenuItemModel menuItem = MenuItemModel.fromJson(jsonEncode(doc.data()));
                       return Material(
                         child: InkWell(
                           onTap: () {
                             Navigator.pushNamed(context, '/update_menu_item', arguments: {
+                              "docId": doc.id,
                               "menuItem" : menuItem
                             });
                           },

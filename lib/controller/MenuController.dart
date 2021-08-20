@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,12 +12,10 @@ class MenuController {
   
   final _menustore = FirebaseFirestore.instance.collection('menu');
   firebase_storage.Reference refMenu = firebase_storage.FirebaseStorage.instance.ref('menu');
-  
-  Future<bool> addNewMenu(MenuItemModel menuItem, List<XFile> fileItem) async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) return false;
 
+
+  Future<List<String>?> uploadImage(User user, List<XFile> fileItem) async {
+    try {
       // # upload image
       var queue = <Future<TaskSnapshot>>[];
       var pathDownload = <String>[];
@@ -35,25 +32,63 @@ class MenuController {
       final resultUpload = await Future.wait(queue);
       if (resultUpload.where((snap) => snap.state != TaskState.success).isNotEmpty) {
         log("snap is not success");
+        return null;
+      }
+
+      return await Future.wait(pathDownload.map((path) => refMenu
+        .child(path)
+        .getDownloadURL()
+      ));
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  Future<bool> addNewMenu(MenuItemModel menuItem, List<XFile> fileItem) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) return false;
+
+      // # assing img path
+      final resultPath = await this.uploadImage(user, fileItem);
+      if (resultPath == null) {
+        log("upload null check.");
         return false;
       }
 
-      // # assing img path
-      final resultDownload = await Future.wait(pathDownload.map((path) {
-        print(refMenu
-          .child(path).fullPath
-          );
-        return refMenu
-          .child(path)
-          .getDownloadURL();
-      }));
-
-      menuItem.imgPath = resultDownload;
+      menuItem.imgPath = resultPath;
 
       // # add menu
       await _menustore.doc().set({
         ...menuItem.toMap(),
         "uid": user.uid
+      });
+
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateNewMenu(String docId, MenuItemModel menuItem, List<XFile> fileItem) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) return false;
+
+      final resultPath = await this.uploadImage(user, fileItem);
+      if (resultPath == null) {
+        log("upload null check.");
+        return false;
+      }
+      
+      if (resultPath.length > 0) {
+        menuItem.imgPath.addAll(resultPath);
+      }
+
+      // # add menu
+      await _menustore.doc(docId).update({
+        ...menuItem.toMap()
       });
 
       return true;

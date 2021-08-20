@@ -10,11 +10,13 @@ class AddMenuItem extends StatefulWidget {
 
   final bool isUpdate;
   final MenuItemModel? menuItem;
+  final String? docId;
 
   const AddMenuItem({ 
     Key? key,
     this.isUpdate = false,
-    this.menuItem
+    this.menuItem,
+    this.docId
   }) : super(key: key);
 
   @override
@@ -50,7 +52,7 @@ class _AddMenuItemState extends State<AddMenuItem> {
     }
   }
 
-  _createNewMenu() async {
+  _actionMenu() async {
     _itemModel.name = nameController.text;
     _itemModel.description = descriptionController.text;
     _itemModel.item = _itemModel.item.map((item) {
@@ -60,10 +62,17 @@ class _AddMenuItemState extends State<AddMenuItem> {
       );
     }).toList();
 
-    final result = await menuController.addNewMenu(_itemModel, _fileItem);
-    log("RESULT : ${result}");
-    if (result) {
-      Navigator.pop(context, result);
+    if (!widget.isUpdate) {
+      final result = await menuController.addNewMenu(_itemModel, _fileItem);
+      if (result) {
+        Navigator.pop(context, result);
+      }
+    } else {
+      log(widget.docId!);
+      final result = await menuController.updateNewMenu(widget.docId!, _itemModel, _fileItem);
+      if (result) {
+        Navigator.pop(context, result);
+      }
     }
   }
 
@@ -149,8 +158,8 @@ class _AddMenuItemState extends State<AddMenuItem> {
         title: Text("Add Menu Item"),
         actions: [
           TextButton(
-            onPressed: _createNewMenu, 
-            child: Text("บันทึก", style: TextStyle(
+            onPressed: _actionMenu, 
+            child: Text(widget.isUpdate ? "อัพเดท" : "บันทึก", style: TextStyle(
               color: Colors.white
             ))
           )

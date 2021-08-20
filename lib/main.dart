@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => AddMenuItem(
                 isUpdate: true,
                 menuItem: arg!['menuItem'],
+                docId: arg['docId'],
               ));
             default:
           }
