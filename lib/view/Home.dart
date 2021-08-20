@@ -80,6 +80,9 @@ class _HomePageState extends State<HomePage> {
                             Navigator.pushNamed(context, '/update_menu_item', arguments: {
                               "docId": doc.id,
                               "menuItem" : menuItem
+                            }).then((value) {
+                              if (value == null) return;
+                              setState(() {});
                             });
                           },
                           child: Card(
