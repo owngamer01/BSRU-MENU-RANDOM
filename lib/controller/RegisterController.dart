@@ -11,9 +11,7 @@ class RegisterController {
   final firebase  = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance.collection('users');
   firebase_storage.Reference refProfile = firebase_storage.FirebaseStorage.instance.ref('users');
-  /*
-    @true data = UserCredential
-  */
+
   Future<StatusResponse> onRegister({
     required File profile,
     required String username,
@@ -43,6 +41,7 @@ class RegisterController {
         "nickname": nickname,
         "profile": imageFile
       };
+      
       await firestore.doc(userCredential.user!.uid).set(mapData);
 
       return StatusResponse(

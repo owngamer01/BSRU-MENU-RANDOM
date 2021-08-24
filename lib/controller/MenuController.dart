@@ -1,5 +1,8 @@
-import 'dart:developer';
+
+import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,7 +34,7 @@ class MenuController {
 
       final resultUpload = await Future.wait(queue);
       if (resultUpload.where((snap) => snap.state != TaskState.success).isNotEmpty) {
-        log("snap is not success");
+        dev.log("snap is not success");
         return null;
       }
 
@@ -52,7 +55,7 @@ class MenuController {
       // # assing img path
       final resultPath = await this.uploadImage(user, fileItem);
       if (resultPath == null) {
-        log("upload null check.");
+        dev.log("upload null check.");
         return false;
       }
 
@@ -66,7 +69,7 @@ class MenuController {
 
       return true;
     } catch (e) {
-      log(e.toString());
+      dev.log(e.toString());
       return false;
     }
   }
@@ -78,7 +81,7 @@ class MenuController {
 
       final resultPath = await this.uploadImage(user, fileItem);
       if (resultPath == null) {
-        log("upload null check.");
+        dev.log("upload null check.");
         return false;
       }
       
@@ -93,7 +96,7 @@ class MenuController {
 
       return true;
     } catch (e) {
-      log(e.toString());
+      dev.log(e.toString());
       return false;
     }
   }
@@ -104,7 +107,28 @@ class MenuController {
       if (user == null) return null;
       return _menustore.where('uid', isEqualTo: user.uid).get();
     } catch (e) {
-      log(e.toString());
+      dev.log(e.toString());
+      return null;
+    }
+  }
+
+  Future<Map<String, MenuItemModel>?> randomMenu() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) return null;
+      var snap = await _menustore.where('uid', isEqualTo: user.uid).get();
+
+      if (snap.docs.length <= 0) {
+        return null;
+      }
+
+      var indexRadom = Random().nextInt(snap.docs.length);
+      return { 
+        snap.docs[indexRadom].id : MenuItemModel.fromJson(jsonEncode(snap.docs[indexRadom].data())) 
+      };
+
+    } catch (e) {
+      dev.log(e.toString());
       return null;
     }
   }

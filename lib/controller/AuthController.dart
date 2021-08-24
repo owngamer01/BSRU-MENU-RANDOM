@@ -14,10 +14,7 @@ class AuthController {
         password: password
       );
       log(userCredential.user.toString());
-      return StatusResponse(
-        status: true,
-        data: null
-      );
+      return StatusResponse(status: true);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         return StatusResponse(
