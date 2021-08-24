@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:test_myapp/controller/RegisterController.dart';
 import 'package:test_myapp/model/auth_model.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({ Key? key }) : super(key: key);

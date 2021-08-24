@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:test_myapp/controller/AuthController.dart';
 
@@ -30,6 +28,11 @@ class _LoginPageState extends State<LoginPage> {
       username: _usernameController.text, 
       password: _passwordController.text
     );
+    if (!result.status) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.message!),
+      ));
+    }
   }
 
   @override
