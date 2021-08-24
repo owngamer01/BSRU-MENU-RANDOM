@@ -62,11 +62,11 @@ class _HomeRandomState extends State<HomeRandom> {
             }
 
             if (snapshot.hasError) {
-              return Text("ERROR");
+              return Center(child: Text("ERROR"));
             }
 
-            if (snapshot.hasData && snapshot.data == null) {
-              return Text("Empty menu please add.");
+            if (snapshot.data == null) {
+              return Center(child: Text("Empty menu please add."));
             }
 
             if (snapshot.connectionState == ConnectionState.done) {

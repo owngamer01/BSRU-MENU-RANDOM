@@ -31,6 +31,12 @@ class AuthController {
         status: false,
         message: 'Error ${e.code}'
       );
+    } catch (e) {
+      log(e.toString());
+      return StatusResponse(
+        status: false,
+        message: 'Error Unknow'
+      );
     }
-  } 
+  }
 }

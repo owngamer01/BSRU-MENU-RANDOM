@@ -19,6 +19,8 @@ class MyApp extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        // showSemanticsDebugger: true,
         theme: ThemeData(
           primarySwatch: Colors.blue
         ),

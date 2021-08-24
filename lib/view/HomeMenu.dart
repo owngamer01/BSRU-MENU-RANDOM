@@ -25,10 +25,10 @@ class _HomeMenuState extends State<HomeMenu> {
       builder: (context, snapshot) {
 
         if (snapshot.hasError) {
-          return Text("Has Error");
+          return Center(child: Text("Has Error"));
         }
         if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
-          return Text("Docs is empty");
+          return Center(child: Text("Docs is empty"));
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
@@ -44,6 +44,7 @@ class _HomeMenuState extends State<HomeMenu> {
                 menuItem: menuItem,
                 key: ValueKey(doc.id),
               );
+              
             }).toList()
           );
         } else {
